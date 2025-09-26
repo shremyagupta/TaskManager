@@ -1,0 +1,23 @@
+databases:
+  - name: taskmanager-db
+    databaseName: taskmanager
+    user: taskmanager_user
+    plan: free
+
+services:
+  - type: web
+    name: taskmanager-backend
+    env: node
+    buildCommand: cd server && npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: taskmanager-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: 10000
